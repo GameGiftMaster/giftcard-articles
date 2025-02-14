@@ -2,7 +2,7 @@ name: Auto Upload Articles
 
 on:
   schedule:
-    - cron: '0 */3 * * *'  # تشغيل كل ساعتين
+    - cron: '*/5 * * * *'  # تشغيل كل 5 دقائق
   workflow_dispatch:  # يسمح بتشغيله يدويًا أيضًا
 
 jobs:
@@ -20,7 +20,10 @@ jobs:
       - name: Install Dependencies
         run: pip install requests  # تثبيت المكتبات إذا لزم الأمر
 
+      - name: Create tokens.json
+        run: echo '${{ secrets.TOKENS_JSON }}' > tokens.json
+
       - name: Run Upload Script
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TOKENS_JSON: ${{ secrets.TOKENS_JSON }}
         run: python upload_articles.py
