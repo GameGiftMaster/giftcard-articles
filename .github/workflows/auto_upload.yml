@@ -1,0 +1,26 @@
+name: Auto Upload Articles
+
+on:
+  schedule:
+    - cron: '0 */3 * * *'  # تشغيل كل ساعتين
+  workflow_dispatch:  # يسمح بتشغيله يدويًا أيضًا
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.x'
+
+      - name: Install Dependencies
+        run: pip install requests  # تثبيت المكتبات إذا لزم الأمر
+
+      - name: Run Upload Script
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python upload_articles.py
